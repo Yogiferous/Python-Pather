@@ -1,6 +1,6 @@
-#!/usr/bin/env python
-#  __author__ = 'Chris'
+#  __author__ = 'Chris Hyde'
 
+# Required import to handle command line arguments
 import sys
 
 def main():
@@ -42,6 +42,7 @@ def get_input_data(input_path):
 
                 pather_matrix.append( split_line )
 
+        # Return data matrix
         return pather_matrix
 
     except:
@@ -59,25 +60,38 @@ def find_those_hashes(pather_matrix):
                 hash = x,y
                 hashes.append( hash )
 
+    # Return hash coordinates
     return hashes
 
 def connect_the_hashes( pather_matrix, hashes_list ):
+    # While hashes are not connected
     while len( hashes_list ) > 1:
+        # Determine starting x position
         starting_x = hashes_list[0][0]
+
+        # Determine starting y position
         starting_y = hashes_list[0][1]
+
+        # Determine differences between vertical coordinates
         vertical_difference = hashes_list[1][0] - hashes_list[0][0]
+
+        # Determine differences between horizontal coordinates
         horizontal_difference = hashes_list[1][1] - hashes_list[0][1]
 
+        # Draw vertical *
         if( vertical_difference > 0 ):
             for x in range( 1, vertical_difference + 1 ):
                 pather_matrix[ starting_x + x ][ starting_y ] = '*'
 
+        # Draw horizontal *
         if( horizontal_difference != 0 ):
             for x in range( min( horizontal_difference + 1, 1), max(horizontal_difference, 1 ) ):
                 pather_matrix[ starting_x + vertical_difference ][ starting_y + x ] = '*'
 
+        # Remove first hash coordinates from hash list
         hashes_list = hashes_list[1:]
 
+    # Return updated matrix
     return pather_matrix
 
 def write_to_output_path(pather_matrix, output_path):
@@ -85,6 +99,5 @@ def write_to_output_path(pather_matrix, output_path):
     with open( output_path, 'w' ) as output_file:
         for line in pather_matrix:
             output_file.write(''.join(line)+'\n')
-
 
 main()
